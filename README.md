@@ -165,7 +165,7 @@
 - [customer_landing.sql](scripts/customer_landing.sql)
 - [accelerometer_landing.sql](scripts/accelerometer_landing.sql)
 <br/>
-*Querying the data using Athena:*
+- **Querying the data using Athena:**
 - Accelerometer landing data:
 <figure>
   <img src="images/accelerometer_landing.jpg" alt="accelerometer landing data" width=60% height=60%>
@@ -176,35 +176,19 @@
 </figure>
 
 ### Trusted Zone
-<p>
 - Sanitize the Customer data from the Website (Landing Zone) and only store the Customer Records who agreed to share their data for research purposes (Trusted Zone) - creating a Glue Table called customer_trusted.
 - [customer_landing_to_trusted.py](scripts/customer_landing_to_trusted.py)
-<br/>
-</p>
-<p>
 - Sanitize the Accelerometer data from the Mobile App (Landing Zone) - and only store Accelerometer Readings from customers who agreed to share their data for research purposes (Trusted Zone) - creating a Glue Table called accelerometer_trusted.
 - [accelerometer_landing_to_trusted_zone.py](scripts/accelerometer_landing_to_trusted_zone.py)
-<br/>
-</p>
-<p>
 - You need to verify your Glue job is successful and only contains Customer Records from people who agreed to share their data. Query your Glue customer_trusted table with Athena
 <figure>
   <img src="images/customer_trusted.jpg" alt="Customer trusted data" width=60% height=60%>
 </figure>
-</p>
 
 ### Curated Zone
-<p>
 - Sanitize the Customer data (Trusted Zone) and create a Glue Table (Curated Zone) that only includes customers who have accelerometer data and have agreed to share their data for research called customers_curated.
 - [customer_trusted_to_curated.py](scripts/customer_trusted_to_curated.py)
-<br/>
-</p>
-<p>
 - Read the Step Trainer IoT data stream (S3) and populate a Trusted Zone Glue Table called step_trainer_trusted that contains the Step Trainer Records data for customers who have accelerometer data and have agreed to share their data for research (customers_curated).
 - [step_trainer_landing_to_trusted.py](scripts/step_trainer_landing_to_trusted.py)
-<br/>
-</p>
-<p>
 - Create an aggregated table that has each of the Step Trainer Readings, and the associated accelerometer reading data for the same timestamp, but only for customers who have agreed to share their data, and make a glue table called machine_learning_curated.
 - [trainer_trusted_to_curated.py](scripts/trainer_trusted_to_curated.py)
-</p>
