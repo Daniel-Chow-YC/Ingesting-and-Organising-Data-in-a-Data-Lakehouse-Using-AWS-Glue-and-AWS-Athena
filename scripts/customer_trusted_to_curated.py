@@ -4,6 +4,15 @@ from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
+from awsglue import DynamicFrame
+
+
+def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFrame:
+    for alias, frame in mapping.items():
+        frame.toDF().createOrReplaceTempView(alias)
+    result = spark.sql(query)
+    return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
+
 
 args = getResolvedOptions(sys.argv, ["JOB_NAME"])
 sc = SparkContext()
@@ -35,9 +44,21 @@ CustomerPrivacyFilter_node2 = Join.apply(
     transformation_ctx="CustomerPrivacyFilter_node2",
 )
 
+# Script generated for node SQL Query
+SqlQuery973 = """
+select * from myDataSource
+where timestamp >= sharewithresearchasofdate
+"""
+SQLQuery_node1679346182467 = sparkSqlQuery(
+    glueContext,
+    query=SqlQuery973,
+    mapping={"myDataSource": CustomerPrivacyFilter_node2},
+    transformation_ctx="SQLQuery_node1679346182467",
+)
+
 # Script generated for node Drop Fields
 DropFields_node1679092278178 = DropFields.apply(
-    frame=CustomerPrivacyFilter_node2,
+    frame=SQLQuery_node1679346182467,
     paths=["user", "timestamp", "x", "y", "z"],
     transformation_ctx="DropFields_node1679092278178",
 )
