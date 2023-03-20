@@ -147,6 +147,10 @@
 - Go to AWS Glue -> Databases -> Tables
 - Create Tables with reference to data location being the bucket where data is stored
 - Alternatively you can create tables directly from the Athena query editor
+- Tables can also be created via Glue Crawlers
+
+##  AWS Glue - Crawlers
+You can use a crawler to populate the AWS Glue Data Catalog with tables. A crawler can crawl multiple data stores in a single run. Upon completion, the crawler creates or updates one or more tables in your Data Catalog.
 
 ## Querying Glue Tables
 - Using the Glue Data Catalog, we can query data using an AWS tool called Athena. The Athena tool is a serverless query service where you can write SQL to run ad-hoc queries on S3 buckets.
