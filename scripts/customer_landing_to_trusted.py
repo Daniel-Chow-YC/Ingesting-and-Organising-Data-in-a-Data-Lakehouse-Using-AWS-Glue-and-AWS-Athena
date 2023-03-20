@@ -33,15 +33,17 @@ PrivacyFilter_node2 = Filter.apply(
 )
 
 # Script generated for node Trusted Customer Zone
-TrustedCustomerZone_node3 = glueContext.write_dynamic_frame.from_options(
-    frame=PrivacyFilter_node2,
+TrustedCustomerZone_node3 = glueContext.getSink(
+    path="s3://dcyc-lake-house/customer/trusted/",
     connection_type="s3",
-    format="json",
-    connection_options={
-        "path": "s3://dcyc-lake-house/customer/trusted/",
-        "partitionKeys": [],
-    },
+    updateBehavior="UPDATE_IN_DATABASE",
+    partitionKeys=[],
+    enableUpdateCatalog=True,
     transformation_ctx="TrustedCustomerZone_node3",
 )
-
+TrustedCustomerZone_node3.setCatalogInfo(
+    catalogDatabase="stedi", catalogTableName="customer_trusted"
+)
+TrustedCustomerZone_node3.setFormat("json")
+TrustedCustomerZone_node3.writeFrame(PrivacyFilter_node2)
 job.commit()
